@@ -12,6 +12,9 @@ plugins
     id 'java-library'
 }
 
+apply plugin: 'application'
+mainClassName="BonusHW.Main"
+
 repositories 
 {
     // Use jcenter for resolving your dependencies.
