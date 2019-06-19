@@ -8,6 +8,10 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+
 
 public class Main
 {
@@ -19,6 +23,7 @@ public class Main
 	boolean reverse=false;
 	boolean upperCase = false;
 	boolean hiddenck = false;
+	boolean lsck = false;
 	
 	
 	public static void main(String[] args)
@@ -55,6 +60,19 @@ public class Main
 					return;
 				}
 				
+				if (hiddenck == true)
+				{
+					ignoreHide();
+					System.exit(0);
+				}
+				
+				if (lsck == true)
+				{
+					 lscheck();
+					 System.exit(0);
+				}
+					
+				
 				if (upperCase == false)
 				{
 					if (reverse == true)
@@ -85,10 +103,7 @@ public class Main
 					}					
 				}
 				
-				if (hiddenck == true)
-				{
-					ignoreHide();
-				}
+				
 			}
 	}
 	
@@ -104,6 +119,7 @@ public class Main
 			help = cmd.hasOption("h");
 			reverse = cmd.hasOption("r");
 			upperCase = cmd.hasOption("F");
+			lsck = cmd.hasOption("ls");
 
 		} catch (Exception e) 
 		
@@ -139,6 +155,11 @@ public class Main
 		        .desc("reverse Print")
 				.argName("reverse name to display")
 		        .build());
+		
+		options.addOption(Option.builder("ls").longOpt("longsize")
+				.desc("show size value")
+				.argName("ls for size")
+				.build());
 
 		return options;
 	}
@@ -231,5 +252,22 @@ public class Main
 			 System.out.println(tFile.getName());			
 		}
 	}
-
+	
+	public void lscheck()
+	{
+		File file = new File(CurDir);
+		File[] fileList = file.listFiles();
+		HashMap<Long,String> hashswan=new HashMap<Long,String>();
+        
+        for(File tfile:fileList)
+        {
+        	if (tfile.isHidden() == false)
+        	hashswan.put(tfile.length(),tfile.getName());
+        }
+        
+        Map<Long,String> hashBlackSwan = new TreeMap<Long,String>(hashswan);
+        
+        for(Long key:hashBlackSwan.keySet())
+         System.out.println(hashBlackSwan.get(key)+ " " + key.toString() +"Byte");
+	}
 }
